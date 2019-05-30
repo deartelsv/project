@@ -286,7 +286,7 @@ public class GameScreen implements Screen {
         clickZone.addListener(new ClickListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                curHP -= game.powerTouch;
+                curHP -= game.upgrade1*2+1;
                 missionHp.updateText("HP: " + curHP + "/" + game.missionHp);
                 System.out.println(curHP);
                 if (curHP <= 0){
@@ -329,7 +329,7 @@ public class GameScreen implements Screen {
         missionReward.updateText("Reward: " + missons.getReward().toString());
         missionLvl.updateText("Mission lvl: " + game.missionLvl);
         missionName.updateText(game.missionName);
-        guildStats.updateText("Army " + game.curArmy + "/" + game.maxArmy + " | " + "Power " + game.powerTouch + "tp");
+        guildStats.updateText("Army " + (game.upgrade2*2+1) + "/" + game.guildLvl * 4 + " | " + "Power " + (game.upgrade1*2+1) + "tp");
     }
 
     private void textUpdate(){
@@ -394,6 +394,7 @@ public class GameScreen implements Screen {
     }
 
     private void damage(){
+        onLvlUp();
         missionHp.updateText("HP: " + curHP + "/" + game.missionHp);
         if (curHP <= 0){
             game.gold += game.missionReward;

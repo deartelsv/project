@@ -254,6 +254,7 @@ public class UpgradesScreen implements Screen {
                 if (game.gold > game.upgrade1 * 2 + 10){
                     game.gold -= game.upgrade1 * 2 + 10;
                     game.upgrade1++;
+                    System.out.println(game.upgrade1);
                     curGold.updateText("Gold: " + game.gold);
                     upgradeLvl1.updateText(game.upgrade1.toString());
                     upgradeCost1.updateText(((Integer)(game.upgrade1 * 2 + 10)).toString());
@@ -265,12 +266,14 @@ public class UpgradesScreen implements Screen {
         upgradeButton2.addListener(new ClickListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if (game.gold > game.upgrade2 * 2 + 10){
+                if ((game.upgrade2*2+1) < (game.guildLvl*4)){
+                    if (game.gold > game.upgrade2 * 2 + 10) {
                     game.gold -= game.upgrade2 * 2 + 10;
                     game.upgrade2++;
                     curGold.updateText("Gold: " + game.gold);
-                    upgradeLvl1.updateText(game.upgrade2.toString());
-                    upgradeCost2.updateText(((Integer)(game.upgrade2 * 2 + 10)).toString());
+                    upgradeLvl2.updateText(game.upgrade2.toString());
+                    upgradeCost2.updateText(((Integer) (game.upgrade2 * 2 + 10)).toString());
+                    }
                 }
                 return super.touchDown(event, x, y, pointer, button);
             }
@@ -283,7 +286,7 @@ public class UpgradesScreen implements Screen {
                     game.gold -= game.upgrade3 * 2 + 10;
                     game.upgrade3++;
                     curGold.updateText("Gold: " + game.gold);
-                    upgradeLvl1.updateText(game.upgrade3.toString());
+                    upgradeLvl3.updateText(game.upgrade3.toString());
                     upgradeCost3.updateText(((Integer)(game.upgrade3 * 2 + 10)).toString());
                 }
                 return super.touchDown(event, x, y, pointer, button);
@@ -297,7 +300,7 @@ public class UpgradesScreen implements Screen {
                     game.gold -= game.upgrade4 * 2 + 10;
                     game.upgrade4++;
                     curGold.updateText("Gold: " + game.gold);
-                    upgradeLvl1.updateText(game.upgrade4.toString());
+                    upgradeLvl4.updateText(game.upgrade4.toString());
                     upgradeCost4.updateText(((Integer)(game.upgrade4 * 2 + 10)).toString());
                 }
                 return super.touchDown(event, x, y, pointer, button);

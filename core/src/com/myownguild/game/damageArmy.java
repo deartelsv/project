@@ -12,6 +12,6 @@ public class damageArmy extends TimerTask {
 
     @Override
     public void run() {
-        game1.curHP -= game1.game.curArmy * 2 + 1 ;
+        game1.curHP -= game1.game.upgrade2*2+1;
     }
 }

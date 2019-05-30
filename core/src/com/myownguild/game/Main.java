@@ -93,7 +93,7 @@ public class Main extends Game {
 		System.out.println("Created");
 		load();
 	    newMisson();
-	    maxArmy = guildLvl * 50;
+	    maxArmy = guildLvl * 4;
 
 		this.setScreen(new MenuScreen(this));
 
