@@ -1,0 +1,20 @@
+
+buttonskin1.png
+size: 256,256
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+buttonLongDown
+  rotate: false
+  xy: 1, 144
+  size: 190, 45
+  orig: 190, 45
+  offset: 0, 0
+  index: -1
+buttonLongUp
+  rotate: false
+  xy: 1, 97
+  size: 190, 45
+  orig: 190, 45
+  offset: 0, 0
+  index: -1
