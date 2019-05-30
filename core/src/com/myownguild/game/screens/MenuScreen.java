@@ -99,6 +99,7 @@ public class MenuScreen implements Screen {
     private final float MAX = 100;
     private final float INC = 10;
     //
+    private Texture bg;
 
 
     public MenuScreen(Main game) {
@@ -113,10 +114,14 @@ public class MenuScreen implements Screen {
     private void init() {
         initUI();
         textField();
+
+
     }
 
     private void initUI(){
         table = new Table();
+        bg = new Texture("textures/background.png");
+        table.setBackground((new TextureRegionDrawable(bg)));
         //
         table.setSize(game.WIDTH, game.HEIGHT);
         //
@@ -212,6 +217,9 @@ public class MenuScreen implements Screen {
         // Инцилизация окон
         windowGuildInfo = new Window("Guild Info", windowStyle);
         windowSettings = new Window("Settings", windowStyle);
+
+        windowGuildInfo.setVisible(false);
+        windowSettings.setVisible(false);
         // таблицы для окон
 
         Label textGuildName = new Label("Guild Name: ", labelStyle);
@@ -223,12 +231,12 @@ public class MenuScreen implements Screen {
 
         windowGuildInfo.setMovable(false);
         windowGuildInfo.getTitleLabel().setAlignment(0);
-        windowGuildInfo.setDebug(true);
+        windowGuildInfo.setDebug(false);
 
         windowSettings.defaults().expand();
         windowSettings.setMovable(false);
         windowSettings.getTitleLabel().setAlignment(0);
-        windowSettings.setDebug(true);
+        windowSettings.setDebug(false);
 
         windowSettings.row();
         windowSettings.add(musicLabel).pad(pad);
@@ -253,7 +261,7 @@ public class MenuScreen implements Screen {
         //window.add(guildName);
 
         //table.setFillParent(true);
-        table.setDebug(true);
+        table.setDebug(false);
         //table.defaults().expand();
         //table.add(textGuildName).pad(pad).width(firstCollumnWidth).height(height/4);
         Table editTable = new Table();
@@ -367,6 +375,10 @@ public class MenuScreen implements Screen {
 
     }
 
+    private void textFieldListener() {
+
+    }
+
     private void textField(){
         guildName.setTextFieldListener(new TextField.TextFieldListener() {
             @Override
@@ -385,6 +397,7 @@ public class MenuScreen implements Screen {
 
     @Override
     public void render(float delta) {
+
         update(delta);
         batch.begin();
         batch.end();

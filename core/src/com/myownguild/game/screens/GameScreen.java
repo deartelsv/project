@@ -30,10 +30,13 @@ import com.myownguild.game.StringSplit;
 import com.myownguild.game.StylesUI;
 import com.myownguild.game.UI.CustomLabel;
 import com.myownguild.game.UI.CustomWindow;
+import com.myownguild.game.damageArmy;
+
+import java.util.Timer;
 
 public class GameScreen implements Screen {
 
-    protected Main game; // protected, как я понял, позволяет в дочерних классах юзать себя
+    public Main game; // protected, как я понял, позволяет в дочерних классах юзать себя
     protected Stage stage;  // каждый screen имеет свой stage
     protected OrthographicCamera camera; //камера
     protected SpriteBatch batch; // рисовалка
@@ -73,7 +76,7 @@ public class GameScreen implements Screen {
     private ProgressBar.ProgressBarStyle progressBarStyle;
     private CustomLabel missionReward;
 
-    private Integer curHP;
+    public Integer curHP;
 
 
     // bar
@@ -89,6 +92,8 @@ public class GameScreen implements Screen {
 
     //
     private Sprite spriteHome;
+    private Texture bg;
+    private java.util.Timer Timer;
 
     public GameScreen(Main game) {
         this.game = game;
@@ -106,8 +111,10 @@ public class GameScreen implements Screen {
         Styles();
         //
         table = new Table();
+        bg = new Texture("textures/background.png");
+        table.setBackground((new TextureRegionDrawable(bg)));
         table.setSize(game.WIDTH, game.HEIGHT);
-        table.setDebug(true);
+        table.setDebug(false);
         //
 
         initIntegers();
@@ -322,6 +329,7 @@ public class GameScreen implements Screen {
         missionReward.updateText("Reward: " + missons.getReward().toString());
         missionLvl.updateText("Mission lvl: " + game.missionLvl);
         missionName.updateText(game.missionName);
+        guildStats.updateText("Army " + game.curArmy + "/" + game.maxArmy + " | " + "Power " + game.powerTouch + "tp");
     }
 
     private void textUpdate(){
@@ -368,14 +376,35 @@ public class GameScreen implements Screen {
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
+
+        Timer timer = new Timer();
+        timer.schedule(new damageArmy(this), 2000, 2000);
+
     }
+
+
 
     @Override
     public void render(float delta) {
         update(delta);
+        damage();
         batch.begin();
         batch.setProjectionMatrix(camera.combined);
         batch.end();
+    }
+
+    private void damage(){
+        missionHp.updateText("HP: " + curHP + "/" + game.missionHp);
+        if (curHP <= 0){
+            game.gold += game.missionReward;
+            game.newMisson();
+            initIntegers();
+            onLvlUp();
+            missionHp.updateText("HP: " + curHP + "/" + game.missionHp);
+            game.plusMission();
+            textUpdate();
+            newGuildLvl();
+        }
     }
 
     private void update(float delta){

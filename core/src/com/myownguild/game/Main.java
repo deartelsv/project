@@ -77,7 +77,7 @@ public class Main extends Game {
 
 
 
-	public int curArmy = 1;
+	public int curArmy = upgrade2*2+1;
 	public int maxArmy;
 	public int powerForEach = 1;
 

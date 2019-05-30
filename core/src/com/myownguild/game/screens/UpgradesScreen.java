@@ -87,6 +87,7 @@ public class UpgradesScreen implements Screen {
     private ImageButton.ImageButtonStyle imageButtonStyle2;
     private ImageButton home;
     private ImageButton upgrades1;
+    private Texture bg;
 
     public UpgradesScreen(Main game) {
         this.game = game;
@@ -111,8 +112,10 @@ public class UpgradesScreen implements Screen {
         initWindowsActors();
         //
         table = new Table();
+        bg = new Texture("textures/background.png");
+        table.setBackground((new TextureRegionDrawable(bg)));
         table.setSize(game.WIDTH, game.HEIGHT);
-        table.setDebug(true);
+        table.setDebug(false);
         //
         initTable();
 
