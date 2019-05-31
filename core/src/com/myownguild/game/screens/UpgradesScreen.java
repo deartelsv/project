@@ -83,10 +83,8 @@ public class UpgradesScreen implements Screen {
     private TextureRegionDrawable trdHome;
     private TextureRegionDrawable trdUpgrade;
 
-    private ImageButton.ImageButtonStyle imageButtonStyle;
-    private ImageButton.ImageButtonStyle imageButtonStyle2;
-    private ImageButton home;
-    private ImageButton upgrades1;
+    private TextButton home;
+    private TextButton upgrades1;
     private Texture bg;
 
     public UpgradesScreen(Main game) {
@@ -103,8 +101,7 @@ public class UpgradesScreen implements Screen {
         Styles();
 
         initButtons();
-        initImageButtons();
-        initHomeImageButton();
+        initTextButton();
         initLabels();
         initLabel();
         buttonListener();
@@ -212,13 +209,13 @@ public class UpgradesScreen implements Screen {
     private void initLabel(){
         Label1 = new CustomLabel("+click damage", labelStyle);
         Label2 = new CustomLabel("+army", labelStyle);
-        Label3 = new CustomLabel("A", labelStyle);
-        Label4 = new CustomLabel("A", labelStyle);
+        Label3 = new CustomLabel("multiclick", labelStyle);
+        Label4 = new CustomLabel("army attack speed", labelStyle);
 
-        upgradeCost1 = new CustomLabel(""+(game.upgrade1 * 2 + 10), labelStyle);
-        upgradeCost2 = new CustomLabel(""+(game.upgrade2 * 2 + 10), labelStyle);
-        upgradeCost3 = new CustomLabel(""+(game.upgrade3 * 2 + 10), labelStyle);
-        upgradeCost4 = new CustomLabel(""+(game.upgrade4 * 2 + 10), labelStyle);
+        upgradeCost1 = new CustomLabel(""+(game.upgrade1 * 5 + 10), labelStyle);
+        upgradeCost2 = new CustomLabel(""+(game.upgrade2 * 5 + 10), labelStyle);
+        upgradeCost3 = new CustomLabel(""+(game.upgrade3 * 50 + 100), labelStyle);
+        upgradeCost4 = new CustomLabel(""+(game.upgrade4 * 50 + 100), labelStyle);
 
 
         upgradeLvl1 = new CustomLabel(game.upgrade1.toString(), labelStyle);
@@ -251,13 +248,13 @@ public class UpgradesScreen implements Screen {
         upgradeButton1.addListener(new ClickListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if (game.gold > game.upgrade1 * 2 + 10){
-                    game.gold -= game.upgrade1 * 2 + 10;
+                if (game.gold >= game.upgrade1 * 5 + 10){
+                    game.gold -= game.upgrade1 * 5 + 10;
                     game.upgrade1++;
                     System.out.println(game.upgrade1);
                     curGold.updateText("Gold: " + game.gold);
                     upgradeLvl1.updateText(game.upgrade1.toString());
-                    upgradeCost1.updateText(((Integer)(game.upgrade1 * 2 + 10)).toString());
+                    upgradeCost1.updateText(((Integer)(game.upgrade1 * 5 + 10)).toString());
                 }
                 return super.touchDown(event, x, y, pointer, button);
             }
@@ -267,12 +264,12 @@ public class UpgradesScreen implements Screen {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 if ((game.upgrade2*2+1) < (game.guildLvl*4)){
-                    if (game.gold > game.upgrade2 * 2 + 10) {
-                    game.gold -= game.upgrade2 * 2 + 10;
+                    if (game.gold >= game.upgrade2 * 5 + 10) {
+                    game.gold -= game.upgrade2 * 5 + 10;
                     game.upgrade2++;
                     curGold.updateText("Gold: " + game.gold);
                     upgradeLvl2.updateText(game.upgrade2.toString());
-                    upgradeCost2.updateText(((Integer) (game.upgrade2 * 2 + 10)).toString());
+                    upgradeCost2.updateText(((Integer) (game.upgrade2 * 5 + 10)).toString());
                     }
                 }
                 return super.touchDown(event, x, y, pointer, button);
@@ -282,12 +279,13 @@ public class UpgradesScreen implements Screen {
         upgradeButton3.addListener(new ClickListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if (game.gold > game.upgrade3 * 2 + 10){
-                    game.gold -= game.upgrade3 * 2 + 10;
+                if (game.gold >= game.upgrade3 * 50 + 100){
+                    game.gold -= game.upgrade3 * 50 + 100;
                     game.upgrade3++;
+                    game.multiclick++;
                     curGold.updateText("Gold: " + game.gold);
                     upgradeLvl3.updateText(game.upgrade3.toString());
-                    upgradeCost3.updateText(((Integer)(game.upgrade3 * 2 + 10)).toString());
+                    upgradeCost3.updateText(((Integer)(game.upgrade3 * 50 + 100)).toString());
                 }
                 return super.touchDown(event, x, y, pointer, button);
             }
@@ -296,12 +294,13 @@ public class UpgradesScreen implements Screen {
         upgradeButton4.addListener(new ClickListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if (game.gold > game.upgrade4 * 2 + 10){
-                    game.gold -= game.upgrade4 * 2 + 10;
+                if (game.gold >= game.upgrade4 * 50 + 100){
+                    game.gold -= game.upgrade4 * 50 + 100;
                     game.upgrade4++;
+                    game.attackSpeed = game.attackSpeed - 100;
                     curGold.updateText("Gold: " + game.gold);
                     upgradeLvl4.updateText(game.upgrade4.toString());
-                    upgradeCost4.updateText(((Integer)(game.upgrade4 * 2 + 10)).toString());
+                    upgradeCost4.updateText(((Integer)(game.upgrade4 * 50 + 100)).toString());
                 }
                 return super.touchDown(event, x, y, pointer, button);
             }
@@ -324,43 +323,10 @@ public class UpgradesScreen implements Screen {
         });
     }
 
-    private void initImageButtons(){
-        imageButtonStyle = StylesUI.imageButtonStyle;
-
-
-        imageButtonStyle.down = skin.getDrawable("button-pressed");
-        imageButtonStyle.up = skin.getDrawable("button");
-
-
-
-        iconHome = new Texture("icons/house128.png");
-
-
-        trdHome = new TextureRegionDrawable(iconHome);
-
-
-        imageButtonStyle.imageDown = new TextureRegionDrawable(trdHome);
-        imageButtonStyle.imageUp = new TextureRegionDrawable(trdHome);
-
-
-
-        home = new ImageButton(imageButtonStyle);
-
-    }
-
-    private void initHomeImageButton(){
-        imageButtonStyle2 = StylesUI.imageButtonStyle;
-
-        imageButtonStyle2.up = skin.getDrawable("button");
-        imageButtonStyle2.down = skin.getDrawable("button-pressed");
-
-        iconUpgrade = new Texture("icons/pencil-edit-button.png");
-        trdUpgrade = new TextureRegionDrawable(iconUpgrade);
-
-        imageButtonStyle2.imageDown = new TextureRegionDrawable(trdUpgrade);
-        imageButtonStyle2.imageUp = new TextureRegionDrawable(trdUpgrade);
-
-        upgrades1 = new ImageButton(imageButtonStyle2);
+    private void initTextButton(){
+        home = new TextButton("<- GAME", textButtonStyle);
+        upgrades1 = new TextButton("SKLAD ->", textButtonStyle);
+        upgrades1.setDisabled(true);
     }
 
     private void createCamera() {

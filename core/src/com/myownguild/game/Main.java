@@ -13,7 +13,7 @@ public class Main extends Game {
 	public final static int WIDTH = 720; // ширина
 	public final static int HEIGHT = 1280; // высота
 
-	public static SoundsManager soundsManager;
+	public SoundsManager soundsManager;
 	public Preferences preferences;
 
 	public String guildName = "YourGuild";
@@ -29,7 +29,7 @@ public class Main extends Game {
 
 	public int guildLvl = 0;
 
-	public Integer gold = 0;
+	public Integer gold = 200;
 	public Integer day = 0;
 
 	public Missons missons = new Missons(guildLvl);
@@ -38,6 +38,9 @@ public class Main extends Game {
 	public Integer missionReward;
 	public Integer missionHp;
 
+	public Integer multiclick = 1;
+	public Integer attackSpeed = 2000;
+
 
 	public Integer counterMissions = 0;
 
@@ -45,6 +48,7 @@ public class Main extends Game {
 		counterMissions++;
 		if (counterMissions == 3){
 			day++;
+			counterMissions /= 3;
 		}
 	}
 
@@ -94,6 +98,11 @@ public class Main extends Game {
 		load();
 	    newMisson();
 	    maxArmy = guildLvl * 4;
+		if (soundsManager == null) {
+			soundsManager = new SoundsManager();
+		}
+
+
 
 		this.setScreen(new MenuScreen(this));
 

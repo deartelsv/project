@@ -51,7 +51,7 @@ public class Missons {
         return "Mission "+lvl;
     }
 
-    public Integer getHp(){return guildLvl * 25;}
+    public Integer getHp(){return guildLvl * 200;}
 
     public void pass(){}
 }

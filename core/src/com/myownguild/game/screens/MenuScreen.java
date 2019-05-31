@@ -31,6 +31,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.myownguild.game.Main;
+import com.myownguild.game.SoundsManager;
 import com.myownguild.game.StylesUI;
 import com.myownguild.game.UI.CustomImageButton;
 
@@ -97,7 +98,7 @@ public class MenuScreen implements Screen {
      */
     private final float MIN = 0;
     private final float MAX = 100;
-    private final float INC = 10;
+    private final float INC = 100;
     //
     private Texture bg;
 
@@ -115,6 +116,7 @@ public class MenuScreen implements Screen {
         initUI();
         textField();
 
+        SoundsManager soundsManager = new SoundsManager();
 
     }
 
@@ -148,6 +150,8 @@ public class MenuScreen implements Screen {
         textButtonStyle.font = StylesUI.FONT;
         textButtonStyle.up = skin.getDrawable("button");
         textButtonStyle.down = skin.getDrawable("button-pressed");
+        textButtonStyle.disabled = skin.getDrawable("button-pressed");
+        textButtonStyle.disabledFontColor = Color.GRAY;
 
         sliderStyle = new Slider.SliderStyle();
         sliderStyle.knobDown = skin.getDrawable("slider-knob-pressed");
@@ -159,6 +163,9 @@ public class MenuScreen implements Screen {
 
         musicSlider = new Slider(MIN, MAX, INC, false, sliderStyle);
         soundSlider = new Slider(MIN, MAX, INC, false, sliderStyle);
+
+        musicSlider.setValue(game.soundsManager.getMusicVolume());
+        soundSlider.setValue(game.soundsManager.getSoundVolume());
 
         musicButton = new TextButton(((Integer)(int)(musicSlider.getValue())).toString(), textButtonStyle);
         soundButton = new TextButton("0", textButtonStyle);
@@ -254,6 +261,8 @@ public class MenuScreen implements Screen {
         play = new TextButton("Play", textButtonStyle);
         createGuild = new TextButton("Create Guild", textButtonStyle);
         GuildMenu = new TextButton("Guild Menu", textButtonStyle);
+        GuildMenu.setDisabled(true);
+        createGuild.setDisabled(true);
         settings = new TextButton("Settings", textButtonStyle);
 
         //guildName = new TextField("Hi", textFieldStyle);
@@ -305,10 +314,13 @@ public class MenuScreen implements Screen {
         GuildMenu.addListener(new ClickListener(){ //кнопка вскрытия/закрытия инфо меню с гильдиями
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if (windowGuildInfo.isVisible()) {
-                    windowGuildInfo.setVisible(false);
-                } else {
-                    windowGuildInfo.setVisible(true);
+                if (!(GuildMenu.isDisabled())) {
+                    if (windowGuildInfo.isVisible()) {
+                        windowGuildInfo.setVisible(false);
+                    } else {
+                        windowGuildInfo.setVisible(true);
+                    }
+
                 }
                 return super.touchDown(event, x, y, pointer, button);
             }
@@ -359,6 +371,7 @@ public class MenuScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 musicValue = (Integer) (int) musicSlider.getValue();
+                game.soundsManager.setMusicVolume(musicValue);
                 System.out.println(musicValue);
                 musicButton.setText(musicValue.toString());
             }
@@ -368,7 +381,8 @@ public class MenuScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 soundValue = (Integer) (int) soundSlider.getValue();
-                System.out.println(soundValue);
+                game.soundsManager.setSoundVolume(soundValue);
+                System.out.println(game.soundsManager.getMusicVolume());
                 soundButton.setText(soundValue.toString());
             }
         });

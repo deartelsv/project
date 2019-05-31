@@ -85,10 +85,8 @@ public class GameScreen implements Screen {
     private TextureRegionDrawable trdHome;
     private TextureRegionDrawable trdUpgrade;
 
-    private ImageButton.ImageButtonStyle imageButtonStyle;
-    private ImageButton.ImageButtonStyle imageButtonStyle2;
-    private ImageButton home;
-    private ImageButton upgrades;
+    private TextButton home;
+    private TextButton upgrades;
 
     //
     private Sprite spriteHome;
@@ -123,10 +121,9 @@ public class GameScreen implements Screen {
         initLabels();
         initWindows();
 
-        buttonListener();
+        initTextButton();
 
-        initImageButtons();
-        initHomeImageButton();
+        buttonListener();
 
         initWindowsActors();
 
@@ -147,6 +144,11 @@ public class GameScreen implements Screen {
         labelStyle = new Label.LabelStyle();
         labelStyle.font = font;
         labelStyle.fontColor = Color.BLACK;
+        //textbutton
+        textButtonStyle = new TextButton.TextButtonStyle();
+        textButtonStyle.font = StylesUI.FONT;
+        textButtonStyle.up = skin.getDrawable("button");
+        textButtonStyle.down = skin.getDrawable("button-pressed");
         //Bar style
         TextureRegionDrawable textureBar = textureBar = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("textures/barRed.png"))));;
         progressBarStyle = new ProgressBar.ProgressBarStyle(skin.newDrawable("white", Color.DARK_GRAY), textureBar);
@@ -238,42 +240,9 @@ public class GameScreen implements Screen {
 
     }
 
-    private void initImageButtons(){
-        imageButtonStyle = StylesUI.imageButtonStyle;
-
-
-        imageButtonStyle.down = skin.getDrawable("button-pressed");
-        imageButtonStyle.up = skin.getDrawable("button");
-
-
-
-        iconHome = new Texture("icons/house128.png");
-
-
-        trdHome = new TextureRegionDrawable(iconHome);
-
-
-        imageButtonStyle.imageDown = new TextureRegionDrawable(trdHome);
-        imageButtonStyle.imageUp = new TextureRegionDrawable(trdHome);
-
-
-
-        home = new ImageButton(imageButtonStyle);
-
-    }
-    private void initHomeImageButton(){
-        imageButtonStyle2 = StylesUI.imageButtonStyle;
-
-        imageButtonStyle2.up = skin.getDrawable("button");
-        imageButtonStyle2.down = skin.getDrawable("button-pressed");
-
-        iconUpgrade = new Texture("icons/pencil-edit-button.png");
-        trdUpgrade = new TextureRegionDrawable(iconUpgrade);
-
-        imageButtonStyle2.imageDown = new TextureRegionDrawable(trdUpgrade);
-        imageButtonStyle2.imageUp = new TextureRegionDrawable(trdUpgrade);
-
-        upgrades = new ImageButton(imageButtonStyle2);
+    private void initTextButton(){
+        home = new TextButton("<- MENU", textButtonStyle);
+        upgrades = new TextButton("UPGRADES ->", textButtonStyle);
     }
 
     private void createCamera(){
@@ -286,7 +255,8 @@ public class GameScreen implements Screen {
         clickZone.addListener(new ClickListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                curHP -= game.upgrade1*2+1;
+                curHP -= (game.upgrade1*2+1)*game.multiclick;
+                game.soundsManager.tap();
                 missionHp.updateText("HP: " + curHP + "/" + game.missionHp);
                 System.out.println(curHP);
                 if (curHP <= 0){
@@ -296,6 +266,7 @@ public class GameScreen implements Screen {
                     onLvlUp();
                     missionHp.updateText("HP: " + curHP + "/" + game.missionHp);
                     game.plusMission();
+                    System.out.println(game.counterMissions);
                     textUpdate();
                     newGuildLvl();
                 }
@@ -378,7 +349,7 @@ public class GameScreen implements Screen {
         });
 
         Timer timer = new Timer();
-        timer.schedule(new damageArmy(this), 2000, 2000);
+        timer.schedule(new damageArmy(this), game.attackSpeed, game.attackSpeed);
 
     }
 
@@ -401,6 +372,8 @@ public class GameScreen implements Screen {
             game.newMisson();
             initIntegers();
             onLvlUp();
+            game.plusMission();
+            System.out.println(game.counterMissions+"ZZZ");
             missionHp.updateText("HP: " + curHP + "/" + game.missionHp);
             game.plusMission();
             textUpdate();
